@@ -1,0 +1,46 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+ // 1. 得到链表的长度
+ // p0 -> 每次反转的哨兵节点
+ // cur -> 当前在反转的节点
+ // pre -> 上次反转的节点
+ // 每次反转k次，反转完后根据p0更新头尾，然后更新p0
+ // 更新pre
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        // 计算链表的长度
+        int n = 0;
+        ListNode cur = head;
+        while(cur != null){
+            n++;
+            cur = cur.next;
+        }
+        ListNode dum = new ListNode(0,head);
+        ListNode p0 = dum;
+        ListNode pre = null;
+        cur = p0.next;
+        while(n >= k){
+            n -= k;
+            ListNode tmp = null;
+            for(int i = 0;i < k;i++){
+                tmp = cur.next;
+                cur.next = pre;
+                pre = cur;
+                cur = tmp;
+            }
+            tmp = p0.next;
+            p0.next.next = cur;
+            p0.next = pre;
+            p0 = tmp;
+        }
+        return dum.next;
+    }
+}
