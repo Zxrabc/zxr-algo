@@ -1,0 +1,36 @@
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+// 快慢指针相遇时
+// 慢指针：a+b
+// 快指针：a+b+k(c+b) = 2*(a+b) => a-c=(k-1)*(b+c)
+// 慢指针相遇时，第二个慢指针从头出发，两个慢指针同时走c步
+// 慢指针1走到环的入口，同时慢指针2距离环的入口为a-c，是环长的倍数
+// 因此，当两个慢指针相遇的位置就是环的入口
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast){
+                // 快慢指针相遇，第二个慢指针从头走
+                while(slow != head){
+                    slow = slow.next;
+                    head = head.next;
+                }
+                return head;
+            }
+        }
+        return null;
+    }
+}
