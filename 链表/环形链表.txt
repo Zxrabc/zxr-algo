@@ -1,0 +1,25 @@
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+//  环形链表的快慢指针一定会相遇,且相遇时的慢指针处于环中
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        ListNode fast = head;
+        while(fast != null && fast.next != null){
+            head = head.next;
+            fast = fast.next.next;
+            if(head == fast){
+                return true;
+            }
+        }
+        return false;
+    }
+}
