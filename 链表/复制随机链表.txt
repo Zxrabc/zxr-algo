@@ -1,0 +1,34 @@
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+// 使用map存储原链表和新链表
+// key 是原链表,value是新链表
+class Solution {
+    public Node copyRandomList(Node head) {
+        if(head == null) return null;
+        Node p0 = head;
+        Map<Node,Node> temp = new HashMap<>();
+        while(p0 != null){
+            temp.put(p0,new Node(p0.val));
+            p0 = p0.next;
+        }
+        p0 = head;
+        while(p0 != null){
+            temp.get(p0).next = temp.get(p0.next);
+            temp.get(p0).random = temp.get(p0.random);
+            p0 = p0.next;
+        }
+        return temp.get(head);
+    }
+}
