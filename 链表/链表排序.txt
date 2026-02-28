@@ -1,0 +1,50 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+ // 递归二分链表，然后两两合并
+class Solution {
+    public ListNode sortList(ListNode head) {
+        // 退出条件 -只有一个节点
+        if(head == null || head.next == null){
+            return head;
+        }
+        // 通过快慢指针找到二分链表
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode mid = slow.next;
+        slow.next = null;
+        ListNode left = sortList(head);
+        ListNode right = sortList(mid);
+        return merge(left,right);
+    }
+
+    // 合并
+    public ListNode merge(ListNode list1,ListNode list2){
+        ListNode dum = new ListNode(-101);
+        ListNode cur = dum;
+        while(list1 != null && list2 != null){
+            if(list1.val >= list2.val){
+                cur.next = list2;
+                list2 = list2.next;
+            }
+            else{
+                cur.next = list1;
+                list1 = list1.next;
+            }
+            cur = cur.next;
+        }
+        cur.next = list1 == null ? list2 : list1;
+        return dum.next;
+    }
+}
