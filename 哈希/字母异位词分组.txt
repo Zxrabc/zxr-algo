@@ -1,0 +1,24 @@
+import java.util.*;
+
+
+// 遍历字符串数组，将每个字符排序，作为key存入map中
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> result = new ArrayList<>();
+        if (strs == null || strs.length < 1) return result;
+        Map<String, List<String>> map = new HashMap<>();
+        for (String str : strs) {
+            char[] sortChars = str.toCharArray();
+            Arrays.sort(sortChars);
+            String key = Arrays.toString(sortChars);
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<>());
+            }
+            map.get(key).add(str);
+        }
+        for (String key : map.keySet()) {
+            result.add(map.get(key));
+        }
+        return result;
+    }
+}
