@@ -1,0 +1,70 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+// 方法1(队列)：
+// 设置一个计数器-表示每层的节点数(初始化为1,就是root)，计数器为0表示一层遍历结束，依次出队同时子节点入队
+// 方法2(数组)：
+// 定义：数组1-当前节点数组，数组2-子节点数组
+// 初始化数组1是root,遍历数组1，子节点放入数组2，遍历完后数组2赋值给数组2
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+// 方法1
+//        List<List<Integer> >res = new ArrayList<>();
+//        if(root == null) return res;
+//        Queue<TreeNode> queue = new ConcurrentLinkedQueue<>();
+//        queue.add(root);
+//        int cnt = 1;
+//        List<Integer> tmp = new ArrayList<>();
+//        TreeNode poll = queue.poll();
+//        while(poll != null){
+//            if(poll.left != null) queue.offer(poll.left);
+//            if(poll.right != null) queue.offer(poll.right);
+//            tmp.add(poll.val);
+//            cnt--;
+//            if(cnt == 0){
+//                // 一层遍历结束
+//                cnt = queue.size();
+//                res.add(new ArrayList<>(tmp));
+//                tmp.clear();
+//            }
+//            poll = queue.poll();
+//        }
+//        return res;
+        // 方法2
+        List<List<Integer> >res = new ArrayList<>();
+        if(root == null) return res;
+        List<TreeNode> cur = new ArrayList<>();
+        List<TreeNode> child = new ArrayList<>();
+        cur.add(root);
+        int p1 = 0;
+        while (p1 < cur.size()){
+            TreeNode treeNode = cur.get(p1);
+            if(treeNode.left != null) child.add(treeNode.left);
+            if(treeNode.right != null) child.add(treeNode.right);
+            p1++;
+            if(p1 == cur.size()){
+                List<Integer> tmp = new ArrayList<>();
+                for (TreeNode node : cur) {
+                    tmp.add(node.val);
+                }
+                res.add(tmp);
+                cur = new ArrayList<>(child);
+                child.clear();
+                p1 = 0;
+            }
+        }
+        return res;
+    }
+}

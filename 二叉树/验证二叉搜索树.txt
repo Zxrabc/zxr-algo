@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ // 先中序遍历，再检查结果数组是否递增
+ // 优化：递归判断每个节点是否小于左子树的最大值，是否小于右子树的最小值
+class Solution {
+    public Boolean isValidBST(TreeNode root) {
+        Boolean res = true;
+        // 中序遍历
+        List<Integer> integers = midTraver(root);
+        if(integers.size() < 2) return true;
+        for(int i = 1;i < integers.size();i++){
+            if(integers.get(i) <= integers.get(i-1)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private List<Integer> midTraver(TreeNode root){
+        List<Integer> res = new ArrayList<>();
+        if(root == null) return res;
+        res.addAll(midTraver(root.left));
+        res.add(root.val);
+        res.addAll(midTraver(root.right));
+        return res;
+    }
+}
