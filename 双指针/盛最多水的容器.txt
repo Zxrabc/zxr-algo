@@ -1,0 +1,26 @@
+// 初始左右指针指向最左和最右，计算面积
+// 移动更矮的指针(移动长指针一定会让面积减少)
+// 重新计算面积，如果面积更大，则更新最大面积
+class Solution {
+    public int maxArea(int[] height) {
+        if(height == null || height.length < 2) return 0;
+        int p1 = 0;
+        int p2 = height.length-1;
+        int result = calcArea(height,p1,p2);
+        while(p1 < p2){
+            if(height[p1] < height[p2]){
+                p1++;
+            }
+            else{
+                p2--;
+            }
+            int newArea =calcArea(height,p1,p2);
+            result = Math.max(newArea,result);
+        }
+        return result;
+    }
+
+    public int calcArea(int[] height,int p1,int p2){
+        return (p2-p1)*(Math.min(height[p1],height[p2]));
+    }
+}

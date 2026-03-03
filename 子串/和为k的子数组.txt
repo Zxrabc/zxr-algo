@@ -1,0 +1,21 @@
+// 先得到出前缀和数组
+// 前缀和数组中差值是target的就表示中间那段子数组的和为target
+// 优化：
+// 思考：求出前缀和数组preNum后，需找到前缀和数组中差值是target的组合有多少 -》 遍历每一个元素i，在其后面找到值是preNum[i]+target的数
+// 反过来，如果一个preNum[i]是k,那么在i之前的前缀和数组中，值为target-k的出现次数就是第i个元素的答案
+// 结论：在计算前缀和数组的时候，记录每一个前缀和出现的次数(哈希表)，每计算第i个前缀和数组，在哈希表中查找preSum[i+1]-target的出现次数
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        Map<Integer,Integer> cntMap = new HashMap<>();
+        cntMap.put(0,1);
+        Integer curSum = 0;
+        int result = 0;
+        for(int i = 0;i < nums.length;i++){
+            int tmp = nums[i];
+            curSum += tmp;
+            result += cntMap.getOrDefault(curSum-k,0);
+            cntMap.put(curSum,cntMap.getOrDefault(curSum,0)+1);
+        }
+        return result;
+    }
+}

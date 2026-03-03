@@ -1,0 +1,29 @@
+// 假设每个位置都是一个宽度为1的桶
+// 桶的左木板高度为左边的最大高度
+// 右木板最大高度为右边的最大高度
+// 优化 -桶的容量取决于桶的短板，因此无需同时存储左右木板的最大高度，只需存木桶的短板
+class Solution {
+    public int trap(int[] height) {
+        int result = 0;
+        if(height == null || height.length < 2){
+            return result;
+        }
+        // 分别获取左右木板的最大高度
+        int[] min = new int[height.length];
+        int maxHeight = 0;
+        for(int i = 0;i < height.length;i++){
+            maxHeight = Math.max(maxHeight,height[i]);
+            min[i] = maxHeight;
+        }
+        maxHeight = 0;
+        for(int i = height.length - 1;i>-1;i--){
+            maxHeight = Math.max(maxHeight,height[i]);
+            min[i] = Math.min(maxHeight,min[i]);
+        }
+        // 遍历所有桶，桶的容量是短木板*宽度-本身高度
+        for(int i = 0;i < height.length;i++){
+            result += min[i]*1-height[i];
+        }
+        return result;
+    }
+}
