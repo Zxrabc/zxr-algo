@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ // 前序遍历的第一个就是根节点
+ // 中序遍历中根节点的左边就是左子树的中序遍历结果left_n，右边就是右子树的中序遍历结果right_n
+ // 前序遍历的根节点后面的left_n个就是左子树的前序遍历，后面的部分的右子树的前序遍历结果
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        Map<Integer, Integer> indexMap = new HashMap<>();
+        for(int i = 0;i < inorder.length;i++){
+            indexMap.put(inorder[i],i);
+        }
+        return build(preorder,0,0,inorder.length-1,indexMap);
+    }
+
+    // i -> 前序遍历中的根节点位置
+    // l -> 中序遍历的左指针
+    // r -> 中序遍历的右指针
+    // indexMap -> 中序遍历的值-下标
+    public TreeNode build(int[] preorder,int i,int l,int r,Map<Integer,Integer> indexMap){
+        if(r < l) return null;
+        TreeNode root = new TreeNode(preorder[i]);
+        int m_index = indexMap.get(root.val);
+        root.left = build(preorder,i+1,l, indexMap.get(root.val)-1,indexMap);
+        root.right = build(preorder,i+1+m_index-l,m_index+1,r,indexMap);
+        return root;
+    }
+}
