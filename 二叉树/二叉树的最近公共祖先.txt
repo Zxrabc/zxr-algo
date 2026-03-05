@@ -1,0 +1,26 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+// 分别在左右子树中找p/q节点
+// 为 null 返回
+// 找到p/q中的一个 返回找到的
+// 左右子树分别找到一个，返回root
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        return dfs(root,p,q);
+    }
+
+    private TreeNode dfs(TreeNode root,TreeNode p,TreeNode q){
+        if(root == null || root == p || root == q) return root;
+        TreeNode l = dfs(root.left, p, q);
+        TreeNode r = dfs(root.right,p,q);
+        if(l != null && r != null) return root;
+        return l != null ? l : r;
+    }
+}
