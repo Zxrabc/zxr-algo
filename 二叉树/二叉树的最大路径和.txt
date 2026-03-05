@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+// 从上往下遍历二叉树
+// 对于每一个子节点，都有一个最大贡献值，即通过该子节点能给对应的根节点贡献多少路径
+// 对于每一个子节点，都有一个最大路径和，即以该子节点为中心，其左右子节点和根节点中舍弃一个节点，剩余节点的路径和最大
+// 某个节点的最大贡献值：节点值+max(左子树的最大贡献值,右子树的最大贡献值)
+// 某个节点的最大路径和：max(节点值+左子树的最大贡献值+右子树的最大贡献值,max(左子树的最大路径和,右子树的最大路径和))
+// 思路：定义变量maxPath(当前最大路径和),从根节点出发，分别计算左右子树的最大路径以及最大贡献值
+class Solution {
+    public int maxPathSum(TreeNode root) {
+        if(root == null) return Integer.MIN_VALUE;
+        if(root.left == null && root.right == null) return root.val;
+        return Math.max(root.val+maxGen(root.left)+maxGen(root.right),Math.max(maxPathSum(root.left),maxPathSum(root.right)));
+    }
+
+    private int maxGen(TreeNode root){
+        if(root == null) return 0;
+        int res = root.val + Math.max(maxGen(root.left),maxGen(root.right));
+        // 最大贡献为负数，则不选，贡献为0
+        return Math.max(res, 0);
+    }
+}
