@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+// 先前序遍历
+// 问题转化：和为k的子数组(前缀和)
+// 问题：前序遍历后的结果中，并不是所有的子数组在二叉树中都是父子节点，二叉树中的父子节点链路在前序遍历结果中可能的不连续的
+// 思考：和为k的子数组的解决方案是最大前缀和，该题也可使用该方案，遍历数组改为前序遍历二叉树(递归)
+// 注意：前缀和需使用long类型，防止数值过大导致结果错误
+class Solution {
+    public int buildTree(TreeNode root,int targetSum) {
+        Map<Long,Integer> cntMap = new HashMap<>();
+        cntMap.put(0L,1);
+        return dfs(root,targetSum,0L,cntMap);
+    }
+
+    private int dfs(TreeNode root,int targetSum,Long curSum,Map<Long,Integer> cntMap){
+        if(root == null) return 0;
+        int res = 0;
+        curSum += root.val;
+        res += cntMap.getOrDefault(curSum-targetSum,0);
+        cntMap.put(curSum,cntMap.getOrDefault(curSum,0)+1);
+        res += dfs(root.left,targetSum,curSum,cntMap);
+        res += dfs(root.right,targetSum,curSum,cntMap);
+        cntMap.put(curSum,cntMap.getOrDefault(curSum,0)-1);
+        return res;
+    }
+
+
+}
