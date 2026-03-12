@@ -1,0 +1,33 @@
+// 使用有向图
+// 记录每个节点的入度
+// 记录每个节点的邻接点
+// 将入度为0的节点入队，依次出队，出队后邻接点的入度-1
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[] cntArray = new int[numCourses];
+        Map<Integer,List<Integer>> adjoinNode = new HashMap<>();
+        for (int[] prerequisite : prerequisites) {
+            cntArray[prerequisite[0]]++;
+            List<Integer> list = adjoinNode.getOrDefault(prerequisite[1],new ArrayList<>());
+            list.add(prerequisite[0]);
+            adjoinNode.put(prerequisite[1],list);
+        }
+        Deque<Integer> deque = new ArrayDeque();
+        for (int i = 0; i < cntArray.length; i++) {
+            if(cntArray[i] == 0) deque.push(i);
+        }
+        while (!deque.isEmpty()){
+            numCourses--;
+            // 出队
+            Integer poll = deque.poll();
+            // 邻接点入度-1
+            for (Integer i : adjoinNode.getOrDefault(poll,new ArrayList<>())) {
+                cntArray[i]--;
+                if(cntArray[i] == 0){
+                    deque.push(i);
+                }
+            }
+        }
+        return numCourses <= 0;
+    }
+}
