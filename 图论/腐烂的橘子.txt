@@ -1,0 +1,76 @@
+// badList1/2 -> 腐烂的橘子的坐标(已腐烂和待腐烂)
+// freshCnt -> 新鲜橘子的数量
+// 初始化遍历网格，找出所有待腐烂橘子坐标和新鲜橘子的数量
+// 遍历待腐烂橘子的坐标，更新待腐烂橘子坐标及新鲜橘子数，知道没有新鲜橘子或待腐烂橘子坐标为空
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        List<Point> alBadList = new ArrayList<>();
+        List<Point> toBadList = new ArrayList<>();
+        int freshCnt = 0;
+        int min = 0;
+        // 遍历，初始化待腐烂橘子的坐标数组
+        for(int i = 0;i < grid.length;i++){
+            for(int j = 0;j < grid[0].length;j++){
+                if(grid[i][j] == 1){
+                    freshCnt++;
+                }
+                else if(grid[i][j] == 2){
+                    toBadList.add(new Point(i,j));
+                }
+            }
+        }
+        if(freshCnt == 0){
+            return 0;
+        }
+        if(toBadList.isEmpty()){
+            return -1;
+        }
+        while (!toBadList.isEmpty()){
+            min++;
+            alBadList.addAll(new ArrayList<>(toBadList));
+            toBadList.clear();
+            for (Point point : alBadList) {
+                if(getValue(grid,point.x-1,point.y) == 1){
+                    freshCnt--;
+                    grid[point.x-1][point.y] = 2;
+                    toBadList.add(new Point(point.x-1,point.y));
+                }
+                if(getValue(grid,point.x+1,point.y) == 1){
+                    freshCnt--;
+                    grid[point.x+1][point.y] = 2;
+                    toBadList.add(new Point(point.x+1,point.y));
+                }
+                if(getValue(grid,point.x,point.y-1) == 1){
+                    freshCnt--;
+                    grid[point.x][point.y-1] = 2;
+                    toBadList.add(new Point(point.x,point.y-1));
+                }
+                if (getValue(grid,point.x,point.y+1) == 1){
+                    freshCnt--;
+                    grid[point.x][point.y+1] = 2;
+                    toBadList.add(new Point(point.x,point.y+1));
+                }
+                if(freshCnt == 0){
+                    return min;
+                }
+            }
+        }
+        if(freshCnt > 0) return -1;
+        return min;
+    }
+
+    private int getValue(int[][] grid,int x,int y){
+        if(x < 0 || x >= grid.length ||
+            y < 0 || y >= grid[0].length) return 0;
+        return grid[x][y];
+    }
+}
+
+class Point{
+    int x;
+    int y;
+    Point(int x,int y){
+        this.x = x;
+        this.y = y;
+    }
+}
